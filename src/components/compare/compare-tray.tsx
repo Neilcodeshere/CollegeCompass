@@ -19,7 +19,7 @@ import { MAX_COMPARE_COLLEGES } from "@/lib/colleges/constants";
  */
 export function CompareTray() {
   const pathname = usePathname();
-  const { items, slugs, count, remove, clear } = useCompareSelection();
+  const { items, slugs, count, remove } = useCompareSelection();
 
   if (count === 0 || pathname === "/compare") return null;
 
@@ -51,16 +51,7 @@ export function CompareTray() {
           ))}
         </ul>
 
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={clear}
-            className="text-sm font-medium text-neutral-600 underline underline-offset-2 hover:text-neutral-900"
-          >
-            Clear
-          </button>
-          <ButtonLink href={`/compare?slugs=${slugs.join(",")}`}>Compare</ButtonLink>
-        </div>
+        <ButtonLink href={`/compare?slugs=${slugs.join(",")}`}>Compare</ButtonLink>
       </PageContainer>
     </section>
   );

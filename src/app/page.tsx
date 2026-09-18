@@ -1,7 +1,5 @@
-import Link from "next/link";
-
 import { PageContainer } from "@/components/layout/page-container";
-import { ButtonLink, Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getFilterOptions } from "@/lib/services/colleges";
 import { MAX_COMPARE_COLLEGES } from "@/lib/colleges/constants";
@@ -53,15 +51,6 @@ export default async function HomePage() {
             Search
           </Button>
         </form>
-
-        <div className="mt-4 flex flex-wrap gap-3">
-          <ButtonLink href="/colleges" variant="secondary">
-            Browse all colleges
-          </ButtonLink>
-          <ButtonLink href="/predictor" variant="secondary">
-            College predictor
-          </ButtonLink>
-        </div>
       </div>
 
       <div className="mt-12 grid gap-8 border-t border-neutral-200 pt-8 sm:grid-cols-3">
@@ -72,23 +61,6 @@ export default async function HomePage() {
           </section>
         ))}
       </div>
-
-      <section className="mt-12 border-t border-neutral-200 pt-8">
-        <h2 className="text-base font-semibold text-neutral-900">Browse by state</h2>
-        <ul className="mt-4 flex flex-wrap gap-2">
-          {states.map((state) => (
-            <li key={state.name}>
-              <Link
-                href={`/colleges?state=${encodeURIComponent(state.name)}`}
-                className="inline-flex items-baseline gap-1.5 rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-sm text-neutral-700 hover:bg-neutral-100"
-              >
-                {state.name}
-                <span className="text-xs text-neutral-500 tabular-nums">{state.count}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
     </PageContainer>
   );
 }

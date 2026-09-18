@@ -171,7 +171,7 @@ export function CollegeDiscovery({
             </div>
           </div>
 
-          <ActiveFilters filters={filters} onChange={setFilters} onClear={clearFilters} />
+          <ActiveFilters filters={filters} onChange={setFilters} />
 
           {isError && data ? (
             <ErrorBanner

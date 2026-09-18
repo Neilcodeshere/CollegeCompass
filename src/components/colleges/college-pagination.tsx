@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { buttonStyles } from "@/components/ui/button";
 import { pageItems } from "@/lib/colleges/pagination";
@@ -28,26 +28,15 @@ export function CollegePagination({
 
   return (
     <nav aria-label="Pagination" className="flex items-center justify-between gap-2">
-      <div className="flex items-center gap-1">
-        <button
-          type="button"
-          onClick={() => onPageChange(1)}
-          disabled={isFirst}
-          aria-label="First page"
-          className={buttonStyles({ variant: "secondary", className: iconButton })}
-        >
-          <ChevronsLeft aria-hidden="true" className="size-4" strokeWidth={2} />
-        </button>
-        <button
-          type="button"
-          onClick={() => onPageChange(page - 1)}
-          disabled={isFirst}
-          aria-label="Previous page"
-          className={buttonStyles({ variant: "secondary", className: iconButton })}
-        >
-          <ChevronLeft aria-hidden="true" className="size-4" strokeWidth={2} />
-        </button>
-      </div>
+      <button
+        type="button"
+        onClick={() => onPageChange(page - 1)}
+        disabled={isFirst}
+        aria-label="Previous page"
+        className={buttonStyles({ variant: "secondary", className: iconButton })}
+      >
+        <ChevronLeft aria-hidden="true" className="size-4" strokeWidth={2} />
+      </button>
 
       <p className="text-sm text-neutral-600 tabular-nums sm:hidden">
         Page {page} of {totalPages}
@@ -78,26 +67,15 @@ export function CollegePagination({
         )}
       </ul>
 
-      <div className="flex items-center gap-1">
-        <button
-          type="button"
-          onClick={() => onPageChange(page + 1)}
-          disabled={isLast}
-          aria-label="Next page"
-          className={buttonStyles({ variant: "secondary", className: iconButton })}
-        >
-          <ChevronRight aria-hidden="true" className="size-4" strokeWidth={2} />
-        </button>
-        <button
-          type="button"
-          onClick={() => onPageChange(totalPages)}
-          disabled={isLast}
-          aria-label="Last page"
-          className={buttonStyles({ variant: "secondary", className: iconButton })}
-        >
-          <ChevronsRight aria-hidden="true" className="size-4" strokeWidth={2} />
-        </button>
-      </div>
+      <button
+        type="button"
+        onClick={() => onPageChange(page + 1)}
+        disabled={isLast}
+        aria-label="Next page"
+        className={buttonStyles({ variant: "secondary", className: iconButton })}
+      >
+        <ChevronRight aria-hidden="true" className="size-4" strokeWidth={2} />
+      </button>
     </nav>
   );
 }

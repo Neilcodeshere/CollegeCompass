@@ -8,10 +8,15 @@ import type { NextConfig } from "next";
  * page to render dynamically and would give up the prerendered college pages.
  * The remaining directives still close off the common attack surface:
  * clickjacking, MIME sniffing, plugin content, base-tag and form hijacking.
+ *
+ * `'unsafe-eval'` is added in development only: React uses eval() there to
+ * rebuild server call stacks for its error overlay, and never in production.
  */
+const isDev = process.env.NODE_ENV === "development";
+
 const CONTENT_SECURITY_POLICY = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data:",
   "font-src 'self'",

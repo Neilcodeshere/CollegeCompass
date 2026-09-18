@@ -53,11 +53,9 @@ function buildChips(filters: CollegeListQuery): Chip[] {
 export function ActiveFilters({
   filters,
   onChange,
-  onClear,
 }: {
   filters: CollegeListQuery;
   onChange: (patch: FilterPatch) => void;
-  onClear: () => void;
 }) {
   const chips = buildChips(filters);
   if (chips.length === 0) return null;
@@ -77,15 +75,6 @@ export function ActiveFilters({
           <span className="sr-only">Remove filter</span>
         </button>
       ))}
-      {chips.length > 1 ? (
-        <button
-          type="button"
-          onClick={onClear}
-          className="px-1 text-sm font-medium text-brand-700 underline underline-offset-2"
-        >
-          Clear all
-        </button>
-      ) : null}
     </div>
   );
 }

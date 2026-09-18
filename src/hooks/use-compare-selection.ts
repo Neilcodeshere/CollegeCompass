@@ -32,6 +32,5 @@ export function useCompareSelection() {
     add: useCallback((item: CompareItem) => dispatchCompare({ type: "add", item }), []),
     remove: useCallback((slug: string) => dispatchCompare({ type: "remove", slug }), []),
     replace: useCallback((items: CompareItem[]) => dispatchCompare({ type: "replace", items }), []),
-    clear: useCallback(() => dispatchCompare({ type: "clear" }), []),
   };
 }
