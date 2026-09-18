@@ -1,0 +1,4 @@
+# Normalise line endings so Windows and CI agree (Prettier also enforces LF).
+* text=auto eol=lf
+*.ico binary
+*.png binary

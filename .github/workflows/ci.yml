@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # `postinstall` runs `prisma generate`, which needs no database.
+      - run: npm ci
+
+      - run: npx prisma validate
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npx prettier --check .
+
+      # `next build` prerenders the college pages, so it needs the database.
+      # Add DATABASE_URL and DIRECT_URL as repository secrets to enable this.
+      - name: Build
+        if: ${{ env.DATABASE_URL != '' }}
+        run: npm run build
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}

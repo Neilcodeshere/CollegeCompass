@@ -1,0 +1,135 @@
+// CollegeCompass data model.
+// Connection URLs live in prisma.config.ts (CLI) and src/lib/db.ts (app).
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Ownership {
+  GOVERNMENT
+  PRIVATE
+}
+
+enum Degree {
+  BTECH
+  MTECH
+  MBA
+  MCA
+}
+
+enum Exam {
+  JEE_MAIN
+  MHT_CET
+  KCET
+  WBJEE
+}
+
+enum Category {
+  GENERAL
+  EWS
+  OBC
+  SC
+  ST
+}
+
+model College {
+  id              String    @id @default(cuid())
+  slug            String    @unique
+  name            String
+  /// Compact label for tight spaces (compare tray, mobile comparison header).
+  shortName       String
+  city            String
+  state           String
+  ownership       Ownership
+  establishedYear Int?
+  accreditation   String?
+  overview        String
+  /// Annual B.Tech tuition in rupees. Denormalised from Course so listing
+  /// filters and sorts hit an indexed column.
+  annualFees      Int
+  /// Mean review rating (one decimal). Denormalised from Review.
+  rating          Float
+  reviewCount     Int
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  courses    Course[]
+  placements PlacementRecord[]
+  reviews    Review[]
+
+  @@index([state])
+  @@index([annualFees])
+  @@index([rating])
+}
+
+model Course {
+  id            String  @id @default(cuid())
+  collegeId     String
+  /// Branch or specialisation, e.g. "Computer Science and Engineering".
+  name          String
+  degree        Degree
+  durationYears Int
+  /// Annual tuition in rupees.
+  annualFees    Int
+  seats         Int?
+
+  college College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  cutoffs Cutoff[]
+
+  @@index([collegeId])
+}
+
+/// Closing rank for one course, exam, category, year and counselling round.
+/// Ranks are positions on the exam's common merit list (lower is better).
+model Cutoff {
+  id          String   @id @default(cuid())
+  courseId    String
+  exam        Exam
+  category    Category
+  year        Int
+  round       Int
+  closingRank Int
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([courseId, exam, category, year, round])
+  @@index([exam, category, year, closingRank])
+}
+
+/// One year of placement outcomes. Amounts are rupees per annum.
+model PlacementRecord {
+  id             String @id @default(cuid())
+  collegeId      String
+  year           Int
+  averagePackage Int
+  medianPackage  Int
+  highestPackage Int
+  /// Share of eligible students placed, from 0 to 1.
+  placementRate  Float
+  recruiterCount Int
+
+  college College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@unique([collegeId, year])
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  collegeId   String
+  /// Whole stars from 1 to 5.
+  rating      Int
+  title       String
+  body        String
+  /// Programme and batch, e.g. "B.Tech CSE, class of 2025". Never a personal name.
+  authorLabel String
+  createdAt   DateTime @default(now())
+
+  college College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@index([collegeId, createdAt])
+}
